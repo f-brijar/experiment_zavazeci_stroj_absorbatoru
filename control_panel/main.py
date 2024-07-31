@@ -1,50 +1,41 @@
-from guizero import App, Window, PushButton, Drawing
+pins.from guizero import App, Window, PushButton, Drawing
 from RPi     import GPIO
 import threading, time, sys
-import clickers
+import clickers, pins
 
-
-
-pin_relay_1 = 40
-pin_switch_1_state = 11
-pin_switch_2_state = 13
-pin_switch_3_state = 15
-pin_switch_4_state = 19
-pin_switch_5_state = 21
-pin_switch_6_state = 23
 
 
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(pin_switch_1_state, GPIO.IN)
-GPIO.setup(pin_switch_2_state, GPIO.IN)
-GPIO.setup(pin_switch_3_state, GPIO.IN)
-GPIO.setup(pin_switch_4_state, GPIO.IN)
-GPIO.setup(pin_switch_5_state, GPIO.IN)
-GPIO.setup(pin_switch_6_state, GPIO.IN)
-GPIO.setup(pin_relay_1, GPIO.OUT)
+GPIO.setup(pins.switch_1_state, GPIO.IN)
+GPIO.setup(pins.switch_2_state, GPIO.IN)
+GPIO.setup(pins.switch_3_state, GPIO.IN)
+GPIO.setup(pins.switch_4_state, GPIO.IN)
+GPIO.setup(pins.switch_5_state, GPIO.IN)
+GPIO.setup(pins.switch_6_state, GPIO.IN)
+GPIO.setup(pins.relay_1, GPIO.OUT)
 
 switch_states = [0,0,0,0,0,0]
 stop_threads  = False
 
 def thread_switches(
-        pin_switch_1_state,
-        pin_switch_2_state,
-        pin_switch_3_state,
-        pin_switch_4_state,
-        pin_switch_5_state,
-        pin_switch_6_state
+        pins.switch_1_state,
+        pins.switch_2_state,
+        pins.switch_3_state,
+        pins.switch_4_state,
+        pins.switch_5_state,
+        pins.switch_6_state
     ):
-    pin_switch_1_state
+    pins.switch_1_state
     while True:
-        sw1_state = GPIO.input(pin_switch_1_state)
-        sw2_state = GPIO.input(pin_switch_2_state)
-        sw3_state = GPIO.input(pin_switch_3_state)
-        sw4_state = GPIO.input(pin_switch_4_state)
-        sw5_state = GPIO.input(pin_switch_5_state)
-        sw6_state = GPIO.input(pin_switch_6_state)
+        sw1_state = GPIO.input(pins.switch_1_state)
+        sw2_state = GPIO.input(pins.switch_2_state)
+        sw3_state = GPIO.input(pins.switch_3_state)
+        sw4_state = GPIO.input(pins.switch_4_state)
+        sw5_state = GPIO.input(pins.switch_5_state)
+        sw6_state = GPIO.input(pins.switch_6_state)
         global switch_states
         switch_states = (sw1_state, sw2_state, sw3_state, sw4_state, sw5_state, sw6_state)
-        #print(switch_states)      
+        #print(switch_states)
         global stop_threads
         if stop_threads:
             break
@@ -53,17 +44,17 @@ def thread_switches(
 
 thr_switches = threading.Thread(
     target=thread_switches,
-    args = (pin_switch_1_state,pin_switch_2_state,pin_switch_3_state,pin_switch_4_state,pin_switch_5_state,pin_switch_6_state)
+    args = (pins.switch_1_state,pins.switch_2_state,pins.switch_3_state,pins.switch_4_state,pins.switch_5_state,pins.switch_6_state)
 )
 thr_switches.start()
 
 def switch_on():
     print("switch_on")
-    GPIO.output(pin_relay_1, 1)
+    GPIO.output(pins.relay_1, 1)
 
 def switch_off():
     print("switch_off")
-    GPIO.output(pin_relay_1, 0)
+    GPIO.output(pins.relay_1, 0)
 
 
 def on_close():
@@ -76,7 +67,7 @@ def on_close():
     global stop_threads
     stop_threads = True
     thr_switches.join()
-    GPIO.output(pin_relay_1, 0)
+    GPIO.output(pins.relay_1, 0)
     GPIO.cleanup()
     app.destroy()
 
@@ -145,7 +136,7 @@ elements_lights   = []
 elements_outlet_1 = []
 elements_outlet_2 = []
 elements_outlet_3 = []
-        
+
 elements_pump.append( Drawing(app, grid=[1,1,1,1], width=140, height=100) )
 elements_valve.append( Drawing(app, grid=[2,1,1,1], width=140, height=100) )
 elements_lights.append( Drawing(app, grid=[3,1,1,1], width=140, height=100) )
