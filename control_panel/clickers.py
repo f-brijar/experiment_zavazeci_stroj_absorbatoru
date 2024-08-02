@@ -1,4 +1,11 @@
-from RPi     import GPIO
+try:
+    from RPi import GPIO
+except ModuleNotFoundError:
+    import sys
+    import fake_rpi
+    sys.modules['RPi'] = fake_rpi.RPi     # Fake RPi
+    sys.modules['RPi.GPIO'] = fake_rpi.RPi.GPIO # Fake GPIO
+    from RPi import GPIO
 import pins
 
 

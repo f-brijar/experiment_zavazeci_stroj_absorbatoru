@@ -1,6 +1,6 @@
 from guizero import App, Window, PushButton, Drawing
-from RPi     import GPIO
-import threading, time, sys
+from RPi import GPIO
+import threading, time, sys, spidev
 import clickers, pins
 
 
@@ -10,7 +10,6 @@ GPIO.setup(pins.switch_1_state, GPIO.IN)
 GPIO.setup(pins.switch_2_state, GPIO.IN)
 GPIO.setup(pins.switch_3_state, GPIO.IN)
 GPIO.setup(pins.switch_4_state, GPIO.IN)
-GPIO.setup(pins.switch_5_state, GPIO.IN)
 GPIO.setup(pins.switch_6_state, GPIO.IN)
 GPIO.setup(pins.relay_1, GPIO.OUT)
 GPIO.setup(pins.relay_2, GPIO.OUT)
@@ -256,4 +255,14 @@ elements_valve[0].when_clicked = clickers.click_valve
 elements_lights[0].when_clicked = clickers.click_lights
 elements_outlet_1[0].when_clicked = clickers.click_outlet_1
 elements_outlet_2[0].when_clicked = clickers.click_outlet_2
-elements_outlet_3[0].when_clicked = clickers.click_outlet_3
+elements_outlet_3[0].when_clicked = clickers.click_outlet_3i
+
+
+#SPI
+spi = spidev.SpiDev()
+bus = 0 # Pi only has SPI bus 0 available
+dev = 1 # Chip selectpin. Set to 0 or 1, depending on the connections
+spi.open(bus, spi)
+spi.max_speed_hz = 500000
+spi.mode         = 0
+
