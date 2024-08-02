@@ -255,14 +255,14 @@ elements_valve[0].when_clicked = clickers.click_valve
 elements_lights[0].when_clicked = clickers.click_lights
 elements_outlet_1[0].when_clicked = clickers.click_outlet_1
 elements_outlet_2[0].when_clicked = clickers.click_outlet_2
-elements_outlet_3[0].when_clicked = clickers.click_outlet_3i
+elements_outlet_3[0].when_clicked = clickers.click_outlet_3
 
 
 #SPI
 spi = spidev.SpiDev()
 bus = 0 # Pi only has SPI bus 0 available
-dev = 1 # Chip selectpin. Set to 0 or 1, depending on the connections
-spi.open(bus, spi)
+dev = 1 # Chip selectpin. Set to 0 or 1, depending on the connections
+spi.open(bus, dev)
 spi.max_speed_hz = 500000
 spi.mode         = 0
 
