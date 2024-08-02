@@ -10,6 +10,7 @@ GPIO.setup(pins.switch_1_state, GPIO.IN)
 GPIO.setup(pins.switch_2_state, GPIO.IN)
 GPIO.setup(pins.switch_3_state, GPIO.IN)
 GPIO.setup(pins.switch_4_state, GPIO.IN)
+GPIO.setup(pins.switch_5_state, GPIO.IN)
 GPIO.setup(pins.switch_6_state, GPIO.IN)
 GPIO.setup(pins.relay_1, GPIO.OUT)
 GPIO.setup(pins.relay_2, GPIO.OUT)
@@ -19,6 +20,7 @@ GPIO.setup(pins.relay_5, GPIO.OUT)
 GPIO.setup(pins.relay_6, GPIO.OUT)
 
 switch_states = [0,0,0,0,0,0]
+automat       = True
 stop_threads  = False
 
 def thread_switches(
@@ -54,7 +56,7 @@ def thread_switches(
         if stop_threads:
             break
         else:
-            time.sleep(0.25)
+            time.sleep(0.1)
 
 thr_switches = threading.Thread(
     target=thread_switches,
@@ -99,14 +101,19 @@ def drawing_update_pump(sw_number):
             elements_pump[1] = elements_pump[0].rectangle(30, 10, 110, 90, color="green")
             elements_pump[2] = elements_pump[0].rectangle(35, 15, 105, 85, color="white")
             elements_pump[3] = elements_pump[0].image(30, 10, "./icons/pump_on.png")
+            global automat
+            if automat:
+                elements_pump[4] = elements_pump[0].text(90, 65, "A")
         else:
             elements_pump[1] = elements_pump[0].rectangle(30, 10, 110, 90, color="red")
             elements_pump[2] = elements_pump[0].rectangle(35, 15, 105, 85, color="white")
-            elements_pump[3] = elements_pump[0].image(30, 10, "./icons/pump_off.png")            
+            elements_pump[3] = elements_pump[0].image(30, 10, "./icons/pump_off.png")
+            elements_pump[4] = elements_pump[0].text(90, 65, "")
     else:
         elements_pump[1] = elements_pump[0].rectangle(30, 10, 110, 90, color="black")
         elements_pump[2] = elements_pump[0].rectangle(35, 15, 105, 85, color="white")
         elements_pump[3] = elements_pump[0].image(30, 10, "./icons/pump_off.png")
+        elements_pump[4] = elements_pump[0].text(90, 65, "")
 
 def drawing_update_valve(sw_number):
     global switch_states
@@ -119,6 +126,9 @@ def drawing_update_valve(sw_number):
             elements_valve[1] = elements_valve[0].rectangle(30, 10, 110, 90, color="green")
             elements_valve[2] = elements_valve[0].rectangle(35, 15, 105, 85, color="white")
             elements_valve[3] = elements_valve[0].image(30, 10, "./icons/valve_on.png")
+            global automat
+            if automat:
+                elements_valve[4] = elements_valve[0].text(90, 65, "A")
         else:
             elements_valve[1] = elements_valve[0].rectangle(30, 10, 110, 90, color="red")
             elements_valve[2] = elements_valve[0].rectangle(35, 15, 105, 85, color="white")
@@ -154,19 +164,23 @@ def drawing_update_outlet_1(sw_number):
     elements_outlet_1[0].delete(elements_outlet_1[1])
     elements_outlet_1[0].delete(elements_outlet_1[2])
     elements_outlet_1[0].delete(elements_outlet_1[3])
+    elements_outlet_1[0].delete(elements_outlet_1[4])
     if (switch_states[sw_number-1] == 1):
         if (GPIO.input(pins.relay_4) == True):
             elements_outlet_1[1] = elements_outlet_1[0].rectangle(30, 10, 110, 90, color="green")
             elements_outlet_1[2] = elements_outlet_1[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_1[3] = elements_outlet_1[0].image(30, 10, "./icons/switch_on.png")
+            elements_outlet_1[4] = elements_outlet_1[0].text(67, 60, "1")
         else:
             elements_outlet_1[1] = elements_outlet_1[0].rectangle(30, 10, 110, 90, color="red")
             elements_outlet_1[2] = elements_outlet_1[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_1[3] = elements_outlet_1[0].image(30, 10, "./icons/switch_off.png")
+            elements_outlet_1[4] = elements_outlet_1[0].text(67, 60, "1")
     else:
         elements_outlet_1[1] = elements_outlet_1[0].rectangle(30, 10, 110, 90, color="black")
         elements_outlet_1[2] = elements_outlet_1[0].rectangle(35, 15, 105, 85, color="white")
         elements_outlet_1[3] = elements_outlet_1[0].image(30, 10, "./icons/switch_off.png")
+        elements_outlet_1[4] = elements_outlet_1[0].text(67, 60, "1")
 
 def drawing_update_outlet_2(sw_number):
     global switch_states
@@ -174,19 +188,23 @@ def drawing_update_outlet_2(sw_number):
     elements_outlet_2[0].delete(elements_outlet_2[1])
     elements_outlet_2[0].delete(elements_outlet_2[2])
     elements_outlet_2[0].delete(elements_outlet_2[3])
+    elements_outlet_2[0].delete(elements_outlet_2[4])
     if (switch_states[sw_number-1] == 1):
         if (GPIO.input(pins.relay_5) == True):
             elements_outlet_2[1] = elements_outlet_2[0].rectangle(30, 10, 110, 90, color="green")
             elements_outlet_2[2] = elements_outlet_2[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_2[3] = elements_outlet_2[0].image(30, 10, "./icons/switch_on.png")
+            elements_outlet_2[4] = elements_outlet_2[0].text(67, 60, "2")
         else:
             elements_outlet_2[1] = elements_outlet_2[0].rectangle(30, 10, 110, 90, color="red")
             elements_outlet_2[2] = elements_outlet_2[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_2[3] = elements_outlet_2[0].image(30, 10, "./icons/switch_off.png")
+            elements_outlet_2[4] = elements_outlet_2[0].text(67, 60, "2")
     else:
         elements_outlet_2[1] = elements_outlet_2[0].rectangle(30, 10, 110, 90, color="black")
         elements_outlet_2[2] = elements_outlet_2[0].rectangle(35, 15, 105, 85, color="white")
         elements_outlet_2[3] = elements_outlet_2[0].image(30, 10, "./icons/switch_off.png")
+        elements_outlet_2[4] = elements_outlet_2[0].text(67, 60, "2")
 
 def drawing_update_outlet_3(sw_number):
     global switch_states
@@ -194,19 +212,23 @@ def drawing_update_outlet_3(sw_number):
     elements_outlet_3[0].delete(elements_outlet_3[1])
     elements_outlet_3[0].delete(elements_outlet_3[2])
     elements_outlet_3[0].delete(elements_outlet_3[3])
+    elements_outlet_3[0].delete(elements_outlet_3[4])
     if (switch_states[sw_number-1] == 1):
         if (GPIO.input(pins.relay_6) == True):
             elements_outlet_3[1] = elements_outlet_3[0].rectangle(30, 10, 110, 90, color="green")
             elements_outlet_3[2] = elements_outlet_3[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_3[3] = elements_outlet_3[0].image(30, 10, "./icons/switch_on.png")
+            elements_outlet_3[4] = elements_outlet_3[0].text(67, 60, "3")
         else:
             elements_outlet_3[1] = elements_outlet_3[0].rectangle(30, 10, 110, 90, color="red")
             elements_outlet_3[2] = elements_outlet_3[0].rectangle(35, 15, 105, 85, color="white")
             elements_outlet_3[3] = elements_outlet_3[0].image(30, 10, "./icons/switch_off.png")
+            elements_outlet_3[4] = elements_outlet_3[0].text(67, 60, "3")
     else:
         elements_outlet_3[1] = elements_outlet_3[0].rectangle(30, 10, 110, 90, color="black")
         elements_outlet_3[2] = elements_outlet_3[0].rectangle(35, 15, 105, 85, color="white")
         elements_outlet_3[3] = elements_outlet_3[0].image(30, 10, "./icons/switch_off.png")
+        elements_outlet_3[4] = elements_outlet_3[0].text(67, 60, "3")
 
 elements_pump     = []
 elements_valve    = []
@@ -243,6 +265,13 @@ elements_outlet_1.append( elements_outlet_1[0].image(35, 15, "./icons/switch_off
 elements_outlet_2.append( elements_outlet_2[0].image(35, 15, "./icons/switch_off.png") )
 elements_outlet_3.append( elements_outlet_3[0].image(35, 15, "./icons/switch_off.png") )
 
+
+elements_pump.append( elements_pump[0].text(90, 70, "A") )
+elements_valve.append( elements_valve[0].text(90, 70, "A") )
+elements_outlet_1.append( elements_outlet_1[0].text(67, 60, "1") )
+elements_outlet_2.append( elements_outlet_2[0].text(67, 60, "2") )
+elements_outlet_3.append( elements_outlet_3[0].text(67, 60, "3") )
+
 elements_pump[0].repeat(100, drawing_update_pump, (1,))
 elements_valve[0].repeat(100, drawing_update_valve, (2,))
 elements_lights[0].repeat(100, drawing_update_lights, (3,))
@@ -257,6 +286,13 @@ elements_outlet_1[0].when_clicked = clickers.click_outlet_1
 elements_outlet_2[0].when_clicked = clickers.click_outlet_2
 elements_outlet_3[0].when_clicked = clickers.click_outlet_3
 
+
+elements_column = []
+elements_column.append( Drawing(app, grid=[1,2,1,4], width=140, height=600) )
+elements_column.append( elements_column[0].rectangle(10, 30, 130, 590, color="black") )
+elements_column.append( elements_column[0].rectangle(15, 35, 125, 585, color="white") )
+elements_column.append( elements_column[0].rectangle(15, 400, 125, 585, color="blue") )
+elements_column.append( elements_column[0].line(15, 500, 125, 500, color="cyan", width=2) )
 
 #SPI
 spi = spidev.SpiDev()
